@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="TicketShop.Shell.Views.OrdersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:vm="clr-namespace:TicketShop.Shell.ViewModels">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Column="0" Header="Инструменты" Margin="10">
+        </GroupBox>
+
+        <DockPanel Grid.Column="1" HorizontalAlignment="Stretch">
+            <GroupBox DockPanel.Dock="Top" Header="Поиск по заказам" Margin="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Введите данные о заказе:"/>
+                    <TextBox Grid.Column="1" Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Width="Auto" FontSize="16" Margin="5" />
+                    <Button Grid.Column="2" Style="{DynamicResource AccentedSquareButtonStyle}" HorizontalAlignment="Left" Margin="5" Height="30" Width="90" Command="{Binding FindOrders}" IsDefault="True">Найти</Button>
+                    <Button Grid.Column="3" Style="{DynamicResource AccentedSquareButtonStyle}" HorizontalAlignment="Left" Margin="5" Height="30" Width="90" Command="{Binding RefreshOrders}" IsDefault="True">Обновить</Button>
+                </Grid>
+            </GroupBox>
+
+            <ListView DockPanel.Dock="Bottom" ItemsSource="{Binding Orders}" SelectedItem="{Binding Customer.Order}" Margin="5" Style="{StaticResource VirtualisedMetroListView}" BorderThickness="0">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="№ заказа" Width="100" DisplayMemberBinding="{Binding Id}" />
+                        <GridViewColumn Header="Билетов" Width="100" DisplayMemberBinding="{Binding ItemsCount}" />
+                        <GridViewColumn Header="Кассир" Width="200" DisplayMemberBinding="{Binding Member}" />
+                        <GridViewColumn Header="Программа" Width="200" DisplayMemberBinding="{Binding ActionName}" />
+                        <GridViewColumn Header="Дата мероприятия" Width="140" DisplayMemberBinding="{Binding ActionDate,  StringFormat={}{0:f}}" />
+                        <GridViewColumn Header="Статус" Width="200" DisplayMemberBinding="{Binding Status, Converter={StaticResource StatusToInfoConverter}}" />
+                        <GridViewColumn Header="Создан" Width="200" DisplayMemberBinding="{Binding CreatedDate, StringFormat=F, Converter={StaticResource DateTimeFormatConverter}}" />
+                        <GridViewColumn Header="Изменить" Width="80">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Style="{DynamicResource AccentedSquareButtonStyle}" ToolTip="Изменить" Command="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=ShowOrder}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                        <Rectangle Width="16" Height="16" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                            <Rectangle.OpacityMask>
+                                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_page_edit}" />
+                                            </Rectangle.OpacityMask>
+                                            <Rectangle.RenderTransform>
+                                                <RotateTransform Angle="90" CenterX="10" CenterY="10"/>
+                                            </Rectangle.RenderTransform>
+                                        </Rectangle>
+                                    </Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Изменить" Command="{Binding Path=ShowOrder}" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
+        </DockPanel>
+
+        <GroupBox Grid.Column="2" Header="Поиск по заказам" Margin="10">
+        </GroupBox>
+    </Grid>
+
+</UserControl>
+
+   

@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="TicketShop.Shell.Views.HelpView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="40" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Name="BrowserGoBack" Click="BrowserGoBack_Click">
+                <Rectangle Width="20" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_navigate_previous}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+
+            <Button Grid.Column="1" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Name="BrowserGoForward" Click="BrowserGoForward_Click">
+                <Rectangle Width="20" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_navigate_next}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+
+            <Button Grid.Column="2" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Name="BrowserRefresh" Click="BrowserRefresh_Click">
+                <Rectangle Width="20" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_refresh}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+
+            <TextBox Name="myUrl" Grid.Column="3" Height="23" VerticalAlignment="Center" KeyDown="myUrl_KeyDown"></TextBox>
+            
+
+            <Button Grid.Column="4" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Name="BrowserGo" Click="BrowserGo_Click">
+                <Rectangle Width="20" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_arrow_right}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+
+            <Button Grid.Column="5" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Name="BrowserHome" Click="BrowserHome_Click">
+                <Rectangle Width="20" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_home}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+
+        </Grid>
+
+        <WebBrowser Grid.Row="1" Name="myBrowser" KeyDown="myBrowser_KeyDown" Navigating="myBrowser_Navigating" Navigated="myBrowser_Navigated" LoadCompleted="myBrowser_LoadCompleted" />
+
+    </Grid>
+</UserControl>
+
+   

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TicketShop.Core.Seat">
+    <Position X="12.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAAAAAAAAAAQAwAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Seat.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TicketShop.Core.Ticket">
+    <Position X="10.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAoKAAAEAQAAAAADCAAAQQiYCgAAABAgAgAAAAAQAAI=</HashCode>
+      <FileName>Ticket.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TicketShop.Core.Order" Collapsed="true">
+    <Position X="5.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAACAgAAgAQAAAAAAEIApAAAgAAAAABAAA=</HashCode>
+      <FileName>Order.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

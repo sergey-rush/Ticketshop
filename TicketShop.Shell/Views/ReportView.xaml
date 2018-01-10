@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="TicketShop.Shell.Views.ReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Column="0" Header="Статистика отчета" Margin="10">
+            <StackPanel>
+                <Label Content="{Binding Path=OrderCountText}" Style="{DynamicResource DescriptionHeaderStyle}" />
+                <Separator/>
+                <Label Content="{Binding Path=TicketCountText}" Style="{DynamicResource DescriptionHeaderStyle}" />
+                <Separator/>
+                <Label Content="{Binding Path=AmountSumText}" Style="{DynamicResource DescriptionHeaderStyle}" />
+                <Separator/>
+            </StackPanel>
+        </GroupBox>
+
+        <DockPanel Grid.Column="1" HorizontalAlignment="Stretch">
+            <GroupBox DockPanel.Dock="Top" Header="Отчет кассира" Margin="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Content="Выберите дату отчета:" Margin="0" VerticalAlignment="Center"></Label>
+                    <DatePicker SelectedDate="{Binding Path=SelectedDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnExceptions=True, NotifyOnValidationError=True}"
+                            Grid.Column="1" Margin="0, 0, 0, 0" Width="150" Height="28" 
+                            HorizontalAlignment="Center" controls:TextBoxHelper.Watermark="Выберите дату" />
+
+
+                    <Button Grid.Column="2" Style="{DynamicResource AccentedSquareButtonStyle}" HorizontalAlignment="Left" Margin="5" Height="30" Width="90" Command="{Binding RefreshReport}" IsDefault="True">Обновить</Button>
+                    <Button Grid.Column="3" Style="{DynamicResource AccentedSquareButtonStyle}" HorizontalAlignment="Right" Margin="5" Height="30" Width="90" Command="{Binding LoadReport}">Сохранить</Button>
+
+                </Grid>
+            </GroupBox>
+
+            <ListView ItemsSource="{Binding Seats, Mode=TwoWay}" SelectedItem="{Binding SelectedSeat, Mode=TwoWay}" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Center" 
+                                  Style="{StaticResource VirtualisedMetroListView}" BorderThickness="0">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="№ заказа" Width="100" DisplayMemberBinding="{Binding OrderId}" />
+                        <GridViewColumn Header="№ билета" Width="100" DisplayMemberBinding="{Binding Id}" />
+                        <GridViewColumn Header="Программа" Width="200" DisplayMemberBinding="{Binding ActionName}" />
+                        <GridViewColumn Header="Дата мероприятия" Width="140" DisplayMemberBinding="{Binding ActionDate,  StringFormat={}{0:f}}" />
+                        <GridViewColumn Header="Сторона" Width="100" DisplayMemberBinding="{Binding SideName}" />
+                        <GridViewColumn Header="Сектор" Width="100" DisplayMemberBinding="{Binding SectorName}" />
+                        <GridViewColumn Header="Ряд" Width="60" DisplayMemberBinding="{Binding RowNum}" />
+                        <GridViewColumn Header="Место" Width="70" DisplayMemberBinding="{Binding SeatNum}" />
+                        <GridViewColumn Header="Бланк" Width="70" DisplayMemberBinding="{Binding BlankId}" />
+                        <GridViewColumn Header="Цена" Width="80" DisplayMemberBinding="{Binding Price, StringFormat=C}" />
+                        <GridViewColumn Header="Бронь" Width="120" DisplayMemberBinding="{Binding ReserveDate, StringFormat=F, Converter={StaticResource DateTimeFormatConverter}}"/>
+                        <GridViewColumn Header="Статус" Width="120" DisplayMemberBinding="{Binding Status, Converter={StaticResource StatusToInfoConverter}}" />
+                        <GridViewColumn Header="Дата оплаты" Width="120" DisplayMemberBinding="{Binding SoldDate, StringFormat=F, Converter={StaticResource DateTimeFormatConverter}}" />
+                        <GridViewColumn Header="Штрих-код" Width="120" DisplayMemberBinding="{Binding BarCode}" />
+                        <GridViewColumn Header="Внешний код" Width="120" DisplayMemberBinding="{Binding ExtBarCode}" />
+                    </GridView>
+                </ListView.View>
+                <ListView.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource MetroListViewItem}" TargetType="{x:Type ListViewItem}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Status}" Value="7">
+                                <Setter Property="Background" Value="#FF8B8B" />
+                                <Setter Property="Foreground" Value="Red" />
+                            </DataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=Status}" Value="7"/>
+                                    <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" Value="#FFBDBD" />
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </DockPanel>
+
+        <GroupBox Grid.Column="2" Header="Выбранный заказ" Margin="10">
+            <StackPanel>
+                <Label Content="{Binding Path=SelectedSeat.OrderId}" ContentStringFormat="Заказ № {0}"  Style="{DynamicResource DescriptionHeaderStyle}" />
+                <Separator/>
+                <Label Content="{Binding Path=SelectedSeatCount}" ContentStringFormat="Билетов: {0}" Style="{DynamicResource DescriptionHeaderStyle}" />
+                <Separator/>
+                <Label Content="{Binding Path=SelectedSeatAmount}" ContentStringFormat="Сумма: {0:C}" Style="{DynamicResource DescriptionHeaderStyle}" />
+                <Separator/>
+            </StackPanel>
+        </GroupBox>
+
+    </Grid>
+</UserControl>
+
+   

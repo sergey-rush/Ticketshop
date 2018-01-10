@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="TicketShop.Shell.Views.PurchaseView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:TicketShop.Shell.ViewModels">
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,10,10,20">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top">
+                    <GroupBox Header="Способ оплаты:" Margin="10">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Укажите способ оплаты:" Margin="10, 0, 10, 0" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Path=PaymentTypes, Mode=OneWay}" SelectedItem="{Binding Path=SelectedPaymentType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="10,10,0,10"></ComboBox>
+                        </StackPanel>
+                    </GroupBox>
+                    
+                    <Label Margin="10" Content="{Binding OperationResult}" Style="{DynamicResource DescriptionHeaderStyle}" />
+
+                    <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" Margin="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="0" Command="{Binding Path=PayOrder}" Margin="20" Height="30" Width="140">Оплатить заказ</Button>
+                            <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="1" Command="{Binding Path=PayOrder}" Margin="20" Height="30" Width="160">Оплатить и распечатать</Button>
+                            <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="2" Command="{Binding Path=CloseWizard}" Margin="20" Height="30" Width="140">Закрыть</Button>
+                        </Grid>
+                    </Border>
+                   
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Bottom">
+
+                    <GroupBox Header="Список билетов" Margin="10">
+
+                        <ListView ItemsSource="{Binding SelectedSpots, Mode=TwoWay}" SelectedItem="{Binding SelectedSpot}"
+                                  SelectionMode="Single" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Center"
+                                  Style="{StaticResource VirtualisedMetroListView}" BorderThickness="0">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="№" Width="40" DisplayMemberBinding="{Binding ItemId}" />
+                                    <GridViewColumn Header="Сторона" Width="120" DisplayMemberBinding="{Binding SideName}" />
+                                    <GridViewColumn Header="Сектор" Width="120" DisplayMemberBinding="{Binding SectorName}" />
+                                    <GridViewColumn Header="Ряд" Width="80" DisplayMemberBinding="{Binding RowNum}" />
+                                    <GridViewColumn Header="Место" Width="80" DisplayMemberBinding="{Binding SeatNum}" />
+                                    <GridViewColumn Header="Цена" Width="80" DisplayMemberBinding="{Binding Price, StringFormat=C}" />
+                                    <GridViewColumn Header="Бронь" Width="120" DisplayMemberBinding="{Binding ReserveDate, StringFormat=F, Converter={StaticResource DateTimeFormatConverter}}"/>
+                                    <GridViewColumn Header="Результат" Width="80" DisplayMemberBinding="{Binding Result, Converter={StaticResource ResultToInfoConverter}}" />
+                                    <GridViewColumn Header="Удалить" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Style="{DynamicResource AccentedSquareButtonStyle}" ToolTip="Удалить" Command="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=RemoveSeat}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                                    <Rectangle Width="16" Height="16" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                                        <Rectangle.OpacityMask>
+                                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}" />
+                                                        </Rectangle.OpacityMask>
+                                                    </Rectangle>
+                                                </Button>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Удалить" Command="{Binding Path=RemoveSeat}" />
+                                </ContextMenu>
+                            </ListView.ContextMenu>
+                        </ListView>
+                    </GroupBox>
+                    <GroupBox Header="Помощь" Margin="10">
+                    <RichTextBox IsReadOnly="True" Padding="5" IsDocumentEnabled="True">
+                        <FlowDocument>
+                            <Paragraph>
+                                <Run>Заказ создан. На этой форме вы можете оплатить заказ.</Run>
+                            </Paragraph>
+                            <Paragraph>
+                                <Run>Билеты заказа зарезервированы до даты, указанной в колонке "Бронь", по истечении этой даты заказ будет аннулирован.</Run>
+                            </Paragraph>
+                            <Paragraph>
+                                <Run>Для оплаты заказа укажите способ оплаты и нажмите "Оплатить". Вам будет предложено распечатать билеты.</Run>
+                            </Paragraph>
+                            <Paragraph>
+                                <Run>Вы можете закрыть форму и оплатить заказ или изменить дату брони билетов позже в разделе "Заказы".</Run>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                    </GroupBox>
+                </StackPanel>
+            </DockPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

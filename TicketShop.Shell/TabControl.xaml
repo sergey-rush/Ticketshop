@@ -1,0 +1,36 @@
+﻿<Controls:MetroWindow x:Class="TicketShop.Shell.TabControl"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      Title="MainWindow"
+                      Height="600"
+                      Width="800">
+
+    
+
+    <ScrollViewer>
+        <StackPanel Margin="5, 10, 5, 0">
+            <GroupBox Margin="0, 10, 0, 0" Header="_Generic theme TabControls">
+                <StackPanel Margin="15, 5, 15, 5">
+                    <Label Margin="0, 5, 0, 0"
+                           Content="MetroAnimatedSingleRowTabControl"
+                           Style="{DynamicResource DescriptionHeaderStyle}" />
+                    <Controls:MetroAnimatedSingleRowTabControl>
+                        <TabItem Header="this tabcontrols tabs">
+                            <TextBlock FontSize="30" Text="Content" />
+                        </TabItem>
+                        <TabItem Header="appear only on a single line">
+                            <TextBlock FontSize="30" Text="Content" />
+                        </TabItem>
+                        <TabItem Header="if they are overflowing">
+                            <TextBlock FontSize="30" Text="Content" />
+                        </TabItem>
+                        <TabItem Header="instead of wrapping them">
+                            <TextBlock FontSize="30" Text="Content" />
+                        </TabItem>
+                    </Controls:MetroAnimatedSingleRowTabControl>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</Controls:MetroWindow>

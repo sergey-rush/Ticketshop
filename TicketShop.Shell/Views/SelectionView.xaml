@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="TicketShop.Shell.Views.SelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:TicketShop.Shell.ViewModels">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Expander Grid.Row="0" Header="Помощь" Foreground="{DynamicResource AccentColorBrush}" Margin="0,0,0,10">
+
+            <RichTextBox IsReadOnly="True" Padding="5" IsDocumentEnabled="True">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run>Перед началом работы выберите программу и дату выступления на левой панели.</Run>
+                    </Paragraph>
+                    <Paragraph>
+                        <Run>Для создания и печати заказа выберите места на схеме зала, нажмите "Резервировать", следуйте подсказкам на форме.</Run>
+                    </Paragraph>
+                    <Paragraph>
+                        <Run>Для множественного выбора мест удерживайте клавишу "Shift", используйте курсор мыши.</Run>
+                    </Paragraph>
+                    <Paragraph>
+                        <Run>Для полного обновления данных в контекстном меню правой кнопки мыши выберите "Обновить все"</Run>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+        </Expander>
+
+
+        <Expander Grid.Row="1" Header="Статистика мест" Foreground="{DynamicResource AccentColorBrush}" Margin="0,0,0,10">
+            <ListView ItemsSource="{Binding HallSeats}" Margin="5" SelectionMode="Multiple"
+                      Style="{StaticResource VirtualisedMetroListView}" BorderThickness="0">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Сторона" Width="100" DisplayMemberBinding="{Binding SideName}" />
+                        <GridViewColumn Header="Сектор" Width="100" DisplayMemberBinding="{Binding SectorName}" />
+                        <GridViewColumn Header="Мест" Width="100" DisplayMemberBinding="{Binding SeatsCount}" />
+                        <GridViewColumn Header="Мин цена" Width="100" DisplayMemberBinding="{Binding MinPrice, StringFormat=C}" />
+                        <GridViewColumn Header="Макс цена" Width="100" DisplayMemberBinding="{Binding MaxPrice, StringFormat=C}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Expander>
+
+        <Border Grid.Row="2" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="0" Margin="10, 0, 0, 0" Height="30" Command="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=ReserveSeats}">Резервировать</Button>
+                <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="1" Margin="10, 0, 10, 0" Height="30" Command="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=ClearSelection}">Отмена</Button>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="3" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1">
+            <StackPanel>
+                <Label Margin="0" Content="Выбранные места" Style="{DynamicResource DescriptionHeaderStyle}" />
+                <TextBlock Margin="0,0,0,10" FontSize="34" FontWeight="ExtraLight" Text="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=TotalSeats, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <Expander Grid.Row="4" Header="Список выбранных мест" IsExpanded="True" Foreground="{DynamicResource AccentColorBrush}" Margin="0,10,0,0">
+
+            <ListView ItemsSource="{Binding SelectedSpots, Mode=TwoWay}" SelectedItem="{Binding SelectedSpot}"
+                  SelectionMode="Single" IsSynchronizedWithCurrentItem="True" Style="{StaticResource VirtualisedMetroListView}"
+                  BorderThickness="0">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Ряд" Width="80" DisplayMemberBinding="{Binding RowNum}" />
+                        <GridViewColumn Header="Место" Width="80" DisplayMemberBinding="{Binding SeatNum}" />
+                        <GridViewColumn Header="Сторона" Width="120" DisplayMemberBinding="{Binding SideName}" />
+                        <GridViewColumn Header="Сектор" Width="120" DisplayMemberBinding="{Binding SectorName}" />
+                        <GridViewColumn Header="Цена" Width="80" DisplayMemberBinding="{Binding Price, StringFormat=C}" />
+                        <GridViewColumn Header="Удалить" Width="80">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Style="{DynamicResource AccentedSquareButtonStyle}" ToolTip="Удалить" Command="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=RemoveSpot}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                        <Rectangle Width="16" Height="16" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                            <Rectangle.OpacityMask>
+                                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}" />
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                    </Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Удалить" Command="{Binding Path=RemoveSpot}" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
+        </Expander>
+
+    </Grid>
+</UserControl>

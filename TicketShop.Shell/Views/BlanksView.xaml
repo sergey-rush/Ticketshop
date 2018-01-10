@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="TicketShop.Shell.Views.BlanksView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+             xmlns:vm="clr-namespace:TicketShop.Shell.ViewModels"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:viewModels="clr-namespace:TicketShop.Shell.ViewModels">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Column="0" Header="Бланки" Margin="10">
+        </GroupBox>
+
+        <DockPanel Grid.Column="1" HorizontalAlignment="Stretch">
+            <GroupBox DockPanel.Dock="Top" Header="Поиск по бланкам" Margin="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Column="0" ItemsSource="{StaticResource BlankStatusList}" DisplayMemberPath="Name" SelectedValuePath="Value" SelectedValue="{Binding SelectedBlankStatus}" Height="30"/>
+                    <Button Grid.Column="1" Style="{DynamicResource AccentedSquareButtonStyle}" HorizontalAlignment="Left" Margin="5" Height="30" Width="90" Command="{Binding RefreshBlanks}" IsDefault="True">Обновить</Button>
+                </Grid>
+            </GroupBox>
+
+            <ListView DockPanel.Dock="Bottom" ItemsSource="{Binding Blanks}" SelectedItem="{Binding SelectedBlank}"
+                      Margin="5" Style="{StaticResource VirtualisedMetroListView}" BorderThickness="0">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="#" Width="100" DisplayMemberBinding="{Binding Id}" />
+                        <GridViewColumn Header="№ бланка" Width="100" DisplayMemberBinding="{Binding Num}" />
+                        <GridViewColumn Header="Серия" Width="100" DisplayMemberBinding="{Binding Serial}" />
+                        <GridViewColumn Header="Пачка" Width="100" DisplayMemberBinding="{Binding Pack}" />
+                        <GridViewColumn Header="Инфо" Width="300" DisplayMemberBinding="{Binding Info}" />
+                        <GridViewColumn Header="Статус" Width="100" DisplayMemberBinding="{Binding Status, Converter={StaticResource StatusToInfoConverter}}" />
+                        <GridViewColumn Header="Создан/Изменен" Width="200" DisplayMemberBinding="{Binding UpdatedDate, StringFormat=F, Converter={StaticResource DateTimeFormatConverter}}" />
+                        <GridViewColumn Header="" Width="80">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Style="{DynamicResource AccentedSquareButtonStyle}" ToolTip="Аннулировать" Command="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=CancelBlank}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                        <Rectangle Width="16" Height="16" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                            <Rectangle.OpacityMask>
+                                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_cancel}" />
+                                            </Rectangle.OpacityMask>
+                                            <!--<Rectangle.RenderTransform>
+                                                <RotateTransform Angle="90" CenterX="10" CenterY="10"/>
+                                            </Rectangle.RenderTransform>-->
+                                        </Rectangle>
+                                    </Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Аннулировать" Command="{Binding Path=CancelBlank}" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
+        </DockPanel>
+
+
+        <Expander Grid.Column="2" Header="Помощь" IsExpanded="True" Foreground="{DynamicResource AccentColorBrush}" Margin="0,0,0,10">
+
+            <RichTextBox IsReadOnly="True" Padding="5" IsDocumentEnabled="True">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run>В этом окне вы можете посмотреть очередь печати бланков.</Run>
+                    </Paragraph>
+                    <Paragraph>
+                        <Run>Приятной работы!</Run>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+        </Expander>
+
+    </Grid>
+</UserControl>
+
+   

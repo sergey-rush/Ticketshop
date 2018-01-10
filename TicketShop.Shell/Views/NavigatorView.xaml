@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="TicketShop.Shell.Views.NavigatorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:TicketShop.Shell.ViewModels"
+             xmlns:models="clr-namespace:TicketShop.Shell.Models"
+             xmlns:map="clr-namespace:TicketShop.Map;assembly=Map"
+             mc:Ignorable="d" Height="200" Width="200"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type models:Spot}">
+            <Ellipse Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"/>
+        </DataTemplate>
+    </UserControl.Resources>
+
+
+    <!--  Embed a zoom and pan control. This is used so that we can scale the content to fit the overview window, therefore we see an overview of all of the content at once. -->
+    <map:ZoomAndPanControl x:Name="overview" Background="LightGray" SizeChanged="overview_SizeChanged">
+        <!--This is the content that is displayed. -->
+        <Grid Width="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=ContentWidth}"
+            Height="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=ContentHeight}">
+
+            <!--This ItemsControl is the main part of the content that is displayed. It contains instances of Spot, the DataTemplate for Spot is in the UserControl.Resources section of this file.-->
+            <ItemsControl x:Name="content" ItemsSource="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=Spots}">
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding X}" />
+                        <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Background>
+                    <ImageBrush ImageSource="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=StageImage}"/>
+                </ItemsControl.Background>
+            </ItemsControl>
+
+            <!-- This Canvas and Border are used to draw the 'Navigator' zoom rect. -->
+            <Canvas>
+                <Thumb x:Name="overviewZoomRectThumb"
+                    Canvas.Left="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=ContentOffsetX, Mode=TwoWay}"
+                    Canvas.Top="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=ContentOffsetY, Mode=TwoWay}"
+                    Width="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=ContentViewportWidth}"
+                    Height="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=ContentViewportHeight}"
+                    DragDelta="overviewZoomRectThumb_DragDelta" Opacity="0.5">
+                    <Thumb.Template>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <Border BorderBrush="Black" BorderThickness="1" Background="Yellow" CornerRadius="1"/>
+                        </ControlTemplate>
+                    </Thumb.Template>
+                </Thumb>
+            </Canvas>
+        </Grid>
+    </map:ZoomAndPanControl>
+</UserControl>

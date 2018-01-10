@@ -1,0 +1,50 @@
+﻿<Controls:MetroWindow x:Class="TicketShop.Shell.Views.WizardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                      xmlns:vm="clr-namespace:TicketShop.Shell.ViewModels"
+                      xmlns:views="clr-namespace:TicketShop.Shell.Views"
+                      Closing="MainWindow_OnClosing" WindowStartupLocation="CenterScreen" Height="600" Width="860"
+                      Topmost="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=Topmost, Mode=TwoWay}"
+                      BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" GlowBrush="{DynamicResource AccentColorBrush}"
+                      Title="{Binding WizardTitle}" Icon="pack://application:,,,/Application.ico">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding CloseWizard}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:ReserveViewModel}">
+            <views:ReserveView DataContext="{Binding Source={x:Static vm:ReserveViewModel.Instance}}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PurchaseViewModel}">
+            <views:PurchaseView DataContext="{Binding Source={x:Static vm:PurchaseViewModel.Instance}}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PrintViewModel}">
+            <views:PrintView DataContext="{Binding Source={x:Static vm:PrintViewModel.Instance}}" />
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ContentControl Grid.Row="0" Name="MainContentControl" Content="{Binding ContentWindow}"/>
+        <StatusBar Grid.Row="1" DockPanel.Dock="Bottom">
+            <StatusBarItem HorizontalAlignment="Left">
+                <StatusBarItem Content="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=StatusText, UpdateSourceTrigger=PropertyChanged}" />
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="0,0,10,0" Text="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=BlankStatus}" HorizontalAlignment="Center"/>
+                    <ProgressBar IsIndeterminate="True" Visibility="{Binding WizardProgressVisibility}" Width="100"/>
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+
+</Controls:MetroWindow>
+

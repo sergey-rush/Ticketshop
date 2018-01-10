@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="TicketShop.Shell.Views.ReportsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:TicketShop.Shell.ViewModels"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:viewModels="clr-namespace:TicketShop.Shell.ViewModels"
+             xmlns:barChart="clr-namespace:TicketShop.Chart.Core.BarChart;assembly=TicketShop.Chart"
+             xmlns:chartControls="clr-namespace:TicketShop.Chart.ChartControls;assembly=TicketShop.Chart"
+             xmlns:doughnut="clr-namespace:TicketShop.Chart.Core.Doughnut;assembly=TicketShop.Chart">
+
+    <Grid>
+        <GroupBox Header="Отчет кассира" Margin="10">
+            <StackPanel>
+                <DataGrid ItemsSource="{Binding HallSeats, Mode=TwoWay}" HorizontalAlignment="Center" SnapsToDevicePixels="True"
+            CanUserReorderColumns="True" CanUserResizeColumns="True"
+          CanUserResizeRows="False" CanUserSortColumns="True" SelectionMode="Single" SelectionUnit="FullRow" CanUserAddRows="False"
+          AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto"
+      ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Сторона" Width="100" Binding="{Binding SideName}" />
+                        <DataGridTextColumn Header="Сектор" Width="100" Binding="{Binding SectorName}" />
+                        <DataGridTextColumn Header="Мест" Width="100" Binding="{Binding SeatsCount}" />
+                        <DataGridTextColumn Header="Мин цена" Width="100" Binding="{Binding MinPrice, StringFormat=C}" />
+                        <DataGridTextColumn Header="Макс цена" Width="100" Binding="{Binding MaxPrice, StringFormat=C}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <barChart:StackedBarChart ChartTitleVisibility="Collapsed" ChartLegendVisibility="Collapsed" SelectedBrush="{DynamicResource AccentColorBrush}" IsRowColumnSwitched="True">
+                    <barChart:StackedBarChart.Series>
+                        <chartControls:ChartSeries SeriesTitle="SectorName" ItemsSource="{Binding Path=HallSeats}" DisplayMember="SectorName" ValueMember="SeatsCount"></chartControls:ChartSeries>
+                        
+                    </barChart:StackedBarChart.Series>
+                </barChart:StackedBarChart>
+
+                <doughnut:DoughnutChart ChartTitle="Результат" ChartSubTitle="Продажи" InnerRadiusRatio=".75">
+                    <doughnut:DoughnutChart.Series>
+                        <chartControls:ChartSeries ItemsSource="{Binding HallSeats}" DisplayMember="SectorName" ValueMember="SeatsCount" SeriesTitle="Overall"></chartControls:ChartSeries>
+                    </doughnut:DoughnutChart.Series>
+                </doughnut:DoughnutChart>
+
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+
+
+</UserControl>
+
+   

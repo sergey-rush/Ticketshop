@@ -1,0 +1,208 @@
+﻿<Controls:MetroWindow x:Class="TicketShop.Shell.Views.OrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:vm="clr-namespace:TicketShop.Shell.ViewModels"
+        BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" GlowBrush="{DynamicResource AccentColorBrush}"
+        Title="{Binding OrderDialogTitle}" Height="600" Width="860" WindowStartupLocation="CenterScreen"
+        Icon="pack://application:,,,/Application.ico">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="10,10,10,20">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top">
+
+                    <GroupBox Header="Информация о заказе" Margin="10">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Content="{Binding Path=OrderNum}" Margin="10,0,10,0" />
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=TicketsCount}" Margin="10,0,10,0" />
+                            <Label Grid.Row="0" Grid.Column="2" Content="{Binding Path=OrderPrice, StringFormat=C0}" Margin="10,0,10,0" />
+                            <Label Grid.Row="0" Grid.Column="3" Content="{Binding Path=MemberName}" Margin="10,0,10,0" />
+                            <Label Grid.Row="0" Grid.Column="4" Content="{Binding Path=OrderDate}" Margin="10,0,10,0" />
+                            <Label Grid.Row="0" Grid.Column="5" Content="{Binding OrderStatus, Converter={StaticResource StatusToInfoConverter}}" Margin="10,0,10,0"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Информация о билетах" Margin="10">
+
+                        <ListView ItemsSource="{Binding Tickets, Mode=TwoWay}" SelectedItem="{Binding SelectedTicket}"
+                                  SelectionMode="Single" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Center" 
+                                  Style="{StaticResource VirtualisedMetroListView}" BorderThickness="0">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="№ билета" Width="100" DisplayMemberBinding="{Binding Id}" />
+                                    <GridViewColumn Header="Программа" Width="100" DisplayMemberBinding="{Binding ActionName}" />
+                                    <GridViewColumn Header="Сторона" Width="100" DisplayMemberBinding="{Binding SideName}" />
+                                    <GridViewColumn Header="Сектор" Width="100" DisplayMemberBinding="{Binding SectorName}" />
+                                    <GridViewColumn Header="Ряд" Width="60" DisplayMemberBinding="{Binding RowNum}" />
+                                    <GridViewColumn Header="Место" Width="70" DisplayMemberBinding="{Binding SeatNum}" />
+                                    <GridViewColumn Header="Бланк" Width="70" DisplayMemberBinding="{Binding BlankId}" />
+                                    <GridViewColumn Header="Цена" Width="80" DisplayMemberBinding="{Binding Price, StringFormat=C}" />
+                                    <GridViewColumn Header="Бронь" Width="120" DisplayMemberBinding="{Binding ReserveDate, StringFormat=F, Converter={StaticResource DateTimeFormatConverter}}"/>
+                                    <GridViewColumn Header="Статус" Width="120" DisplayMemberBinding="{Binding Status, Converter={StaticResource StatusToInfoConverter}}" />
+                                    <GridViewColumn Header="Дата оплаты" Width="120" DisplayMemberBinding="{Binding SoldDate, StringFormat=F, Converter={StaticResource DateTimeFormatConverter}}" />
+                                    <GridViewColumn Header="Штрих-код" Width="120" DisplayMemberBinding="{Binding BarCode}" />
+                                    <GridViewColumn Header="Внешний код" Width="120" DisplayMemberBinding="{Binding ExtBarCode}" />
+                                    <GridViewColumn Header="Печать" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Style="{DynamicResource AccentedSquareButtonStyle}" ToolTip="Печать" Command="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=PrintReservedTicket}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                                    <Rectangle Width="16" Height="16" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                                        <Rectangle.OpacityMask>
+                                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_printer_text}" />
+                                                        </Rectangle.OpacityMask>
+                                                    </Rectangle>
+                                                </Button>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Удалить" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Style="{DynamicResource AccentedSquareButtonStyle}" ToolTip="Удалить" Command="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=CancelTicket}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                                    <Rectangle Width="16" Height="16" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                                        <Rectangle.OpacityMask>
+                                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}" />
+                                                        </Rectangle.OpacityMask>
+                                                    </Rectangle>
+                                                </Button>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource MetroListViewItem}" TargetType="{x:Type ListViewItem}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=Status}" Value="7">
+                                            <Setter Property="Background" Value="#FF8B8B" />
+                                            <Setter Property="Foreground" Value="Red" />
+                                        </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=Status}" Value="7"/>
+                                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background" Value="#FFBDBD" />
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </GroupBox>
+
+                    <GroupBox Header="Билеты" Margin="10" Visibility="{Binding ShowTickets, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                        <ListView ItemsSource="{Binding Tickets, Mode=TwoWay}" SelectedItem="{Binding SelectedTicket}" SelectionMode="Single"
+                                  IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Center" SnapsToDevicePixels="True"
+                                  Style="{StaticResource VirtualisedMetroListView}" BorderThickness="0" Visibility="{Binding ShowTickets, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding TicketImage}" HorizontalAlignment="Center" Width="780" Margin="0, 6"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                    </GroupBox>
+
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Bottom">
+                    <GroupBox Header="Зарезервирован до:" Margin="10">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Заказ зарезервирован до:" Margin="10, 0, 10, 0" VerticalAlignment="Center"></Label>
+
+                            <xctk:DateTimePicker Name="DtpReserveDate" Format="Custom" FormatString="dd MMMM yyyy HH:mm" Height="28" HorizontalAlignment="Center" 
+                 Value="{Binding Path=ReserveDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnExceptions=True, NotifyOnValidationError=True}" 
+                 VerticalAlignment="Top" Width="180" Margin="10,10,0,10"/>
+
+                            <Label Content="{Binding ReserveDate, StringFormat=\{0:dd MMMM yyyy HH:mm\}}" Margin="10, 0, 10, 0" FontSize="16" VerticalAlignment="Center"/>
+                            <Button Style="{DynamicResource AccentedSquareButtonStyle}" Command="{Binding Path=UpdateOrder}" Height="30" Width="120">Сохранить</Button>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <Expander Header="Информация о покупателе" Foreground="{DynamicResource AccentColorBrush}" Margin="10">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0" FontSize="16" Margin="5">Фамилия:</Label>
+                            <Label Grid.Row="0" Grid.Column="1" FontSize="16" Margin="5">Имя:</Label>
+                            <Label Grid.Row="0" Grid.Column="2" FontSize="16" Margin="5">Отчество:</Label>
+
+                            <TextBox Grid.Row="1" Grid.Column="0" MaxLength="36" FontSize="16" Margin="5" Text="{Binding LastName}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" MaxLength="36" FontSize="16" Margin="5" Text="{Binding FirstName}" />
+                            <TextBox Grid.Row="1" Grid.Column="2" MaxLength="36" FontSize="16" Margin="5" Text="{Binding MiddleName}" />
+
+                            <Label Grid.Row="2" Grid.Column="0" FontSize="16" Margin="5">Email:</Label>
+                            <Label Grid.Row="2" Grid.Column="1" FontSize="16" Margin="5">Телефон:</Label>
+
+                            <TextBox Grid.Row="3" Grid.Column="0" MaxLength="60" FontSize="16" Margin="5" Text="{Binding CustomerEmail}" />
+                            <TextBox Grid.Row="3" Grid.Column="1" MaxLength="10" FontSize="16" Margin="5" Text="{Binding CustomerPhone}" />
+                            <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Row="3" Grid.Column="2" Command="{Binding Path=UpdateOrder}" Margin="5" Height="30" Width="120">Сохранить</Button>
+                        </Grid>
+
+                    </Expander>
+
+                    <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" Margin="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="0" Command="{Binding Path=PrintReservedTickets}" Height="30" Width="200" Margin="20">Печать</Button>
+                            <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="1" Command="{Binding Path=PurchaseOrder}" Height="30" Width="200" Margin="20">Оплатить заказ</Button>
+                            <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="2" Command="{Binding Path=CancelOrder}" Height="30" Width="200" Margin="20">Отменить заказ</Button>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </DockPanel>
+        </ScrollViewer>
+        <StatusBar Grid.Row="1" DockPanel.Dock="Bottom">
+            <StatusBarItem HorizontalAlignment="Left">
+                <StatusBarItem Content="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=StatusText, UpdateSourceTrigger=PropertyChanged}" />
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="0,0,10,0" Text="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=BlankStatus}" HorizontalAlignment="Center"/>
+                    <ProgressBar IsIndeterminate="True" Visibility="{Binding WizardProgressVisibility}" Width="100"/>
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+
+</Controls:MetroWindow>

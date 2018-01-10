@@ -1,0 +1,17 @@
+﻿<Controls:MetroWindow x:Class="TicketShop.Shell.Views.PrintProgress"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Loaded="ProgressDialog_OnLoaded" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" Topmost="True"
+        Title="Ticketshop" Height="180" Width="470" WindowStartupLocation="CenterScreen" WindowTransitionsEnabled="False" ShowInTaskbar="False"
+        ResizeMode="NoResize" WindowStyle="None" WindowState="Normal" ShowCloseButton="False" ShowMaxRestoreButton="False">
+    <Grid>
+        <StackPanel>
+            <TextBlock Name="DialogMessage" Margin="10" Width="440" TextWrapping="Wrap" />
+            <Label Name="DescriptionLabel" Margin="10, 0"/>
+            <ProgressBar Name="Progress" Margin="10" Height="10" Visibility="Visible" IsIndeterminate="False"></ProgressBar>
+            <Button Name="CancelButton" Style="{DynamicResource AccentedSquareButtonStyle}" Content="Отмена" Width="100" Margin="10" HorizontalAlignment="Center" Click="CancelButton_OnClick" />
+        </StackPanel>
+
+    </Grid>
+</Controls:MetroWindow>

@@ -1,0 +1,164 @@
+﻿<UserControl x:Class="TicketShop.Shell.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+             xmlns:vm="clr-namespace:TicketShop.Shell.ViewModels"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:viewModels="clr-namespace:TicketShop.Shell.ViewModels">
+
+    <Grid>
+        <TabControl Margin="0, 10, 0, 0" TabStripPlacement="Left">
+            <TabItem Header="Общие">
+                <GroupBox Header="Общие настройки" HorizontalAlignment="Stretch">
+                    <StackPanel HorizontalAlignment="Left">
+                        <Label Content="Во весь экран:" Margin="10"></Label>
+                        <Controls:ToggleSwitch OnLabel="Включено" OffLabel="Выключено" IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}, Path=ToggleFullScreen}"/>
+                        <Separator/>
+                        <Label Content="Поверх всех окон:" Margin="10"></Label>
+                        <Controls:ToggleSwitch OnLabel="Включено" OffLabel="Выключено" IsChecked="{Binding Topmost}"/>
+                        <Separator/>
+                        <Label Content="Визуально показывать билеты:" Margin="10"></Label>
+                        <Controls:ToggleSwitch OnLabel="Включено" OffLabel="Выключено" IsChecked="{Binding ShowTickets}"/>
+                        <Separator/>
+                        <Label Content="Aвтообновление данных:" Margin="10"></Label>
+                        <Controls:ToggleSwitch OnLabel="Включено" OffLabel="Выключено" IsChecked="{Binding AutoRefresh}"/>
+                        <Label Content="Интервал обновления в минутах:" Margin="10"></Label>
+                        <TextBox Text="{Binding TimerInterval}" Width="40" FontSize="16" Margin="5"></TextBox>
+                        <Separator/>
+                        <Label Content="Количество заказов для отображения:" Margin="10"></Label>
+                        <TextBox Text="{Binding RowCount}" Width="40" FontSize="16" Margin="5"></TextBox>
+                        <Separator/>
+                        <Button Style="{DynamicResource AccentedSquareButtonStyle}" Margin="10" Height="30" Width="120" Command="{Binding Path=SaveSettings}">Сохранить</Button>
+                    </StackPanel>
+                </GroupBox>
+            </TabItem>
+            <TabItem Header="Оформление">
+                <GroupBox Header="Оформление" HorizontalAlignment="Stretch">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel HorizontalAlignment="Left">
+
+                            <Label Content="Выберите фон" Style="{DynamicResource DescriptionHeaderStyle}" />
+
+                            <ListBox ItemsSource="{Binding AppThemes, Mode=OneWay}" SelectedItem="{Binding SelectedTheme, Mode=TwoWay}" Margin="20">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse Fill="{Binding Path=ColorBrush}" Width="20" Height="20" Margin="10, 0"/>
+                                            <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Label Content="Выберите цвет" Style="{DynamicResource DescriptionHeaderStyle}" />
+
+                            <ListBox ItemsSource="{Binding AccentColors, Mode=OneWay}" SelectedItem="{Binding SelectedAccent}" Margin="20" Style="{StaticResource VirtualisedMetroListBox}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse Fill="{Binding Path=ColorBrush}" Width="20" Height="20" Margin="10, 0"/>
+                                            <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+            <TabItem Header="Печать">
+                <GroupBox Header="Настройки печати" HorizontalAlignment="Stretch">
+                    <StackPanel HorizontalAlignment="Left" Width="600">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="26"/>
+                                <RowDefinition Height="26"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="220"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0" Content="IP адрес принтера:"></Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PrinterIp}"/>
+
+                            <Label Grid.Row="1" Grid.Column="0" Content="Маска сети:"></Label>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NetworkMask}"/>
+
+                            <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Здесь выводится информация полученная от принтера:" VerticalAlignment="Center"></Label>
+
+                            <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Path=PrinterInfo}" Margin="10, 0, 10, 0" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+                            <Label Grid.Row="4" Grid.Column="0" Content="Сканировать всю сеть" VerticalAlignment="Center"></Label>
+
+                            <Controls:ToggleSwitch Grid.Row="4" Grid.Column="1" OnLabel="Включено" OffLabel="Выключено" IsChecked="{Binding AutoSearch}"/>
+
+                            <Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" Margin="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Style="{DynamicResource AccentedSquareButtonStyle}" Height="30" Width="160" Margin="10" Grid.Column="0" Command="{Binding Path=SetupPrinter}">Наcтроить принтер</Button>
+                                    <Button Style="{DynamicResource AccentedSquareButtonStyle}" Height="30" Width="160" Margin="10" Grid.Column="1" Command="{Binding Path=FindPrinter}">Найти принтер</Button>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <Label Content="основные настройки принтера" Style="{DynamicResource DescriptionHeaderStyle}" />
+                        <RichTextBox IsReadOnly="True" Padding="5" IsDocumentEnabled="True">
+                            <FlowDocument>
+                                <Paragraph>
+                                    <Run>Проверьте тип датчика Media Label => Sensor Type. Правильное значение - Sensor Type(ST): R</Run>
+                                    <Run>Датчик черной метки на обратной стороне билета должен быть определен как Reflective</Run>
+                                </Paragraph>
+                                <Paragraph>
+                                    <Run>Для установки конфигурации принтера нажмите "Наcтроить принтер"</Run>
+                                </Paragraph>
+                                <Paragraph>
+                                    <Run>Для получения текущих настроек принтера нажмите "Найти принтер"</Run>
+                                </Paragraph>
+                                <Paragraph>
+                                    <Run>Для поиска принтера в сети введите любой IP адрес и маску сети</Run>
+                                </Paragraph>
+                            </FlowDocument>
+                        </RichTextBox>
+                    </StackPanel>
+                </GroupBox>
+            </TabItem>
+            <TabItem Header="О программе">
+                <GroupBox Header="О программе" HorizontalAlignment="Stretch">
+                    <StackPanel Margin="10" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Background="White" Width="600">
+                            <Image Source="/Resources/Ticketshop.png" Margin="10" Height="90" Width="200" HorizontalAlignment="Left" />
+                        </StackPanel>
+                        <Label Name="AssemblyTitleLabel" ></Label>
+                        <Label Name="ProductNameLabel" ></Label>
+                        <Label Name="VersionLabel" ></Label>
+                        <Label Name="CopyrightLabel" ></Label>
+                        <Label Name="CompanyNameLabel" ></Label>
+                        <TextBlock Name="DescriptionTextBlock" TextWrapping="Wrap" />
+                        <Separator/>
+                        <Label Content="Сообщение разработчику" Style="{DynamicResource DescriptionHeaderStyle}" />
+                        <Button Name="ReportButton" Click="ReportButton_OnClick" Width="50" Height="50" Style="{DynamicResource MetroCircleButtonStyle}" ToolTip="Сообщение разработчику">
+                            <Rectangle Width="20" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_email}" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+                    </StackPanel>
+                </GroupBox>
+            </TabItem>
+        </TabControl>
+    </Grid>
+
+
+</UserControl>
+
+   

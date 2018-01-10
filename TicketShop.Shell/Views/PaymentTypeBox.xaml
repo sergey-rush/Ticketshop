@@ -1,0 +1,25 @@
+﻿<Controls:MetroWindow x:Class="TicketShop.Shell.Views.PaymentTypeBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Closed="PaymentTypeBox_OnClosed" Topmost="True" Title="Способ оплаты" Height="160" Width="380"
+        BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" GlowBrush="{DynamicResource AccentColorBrush}"
+         WindowStartupLocation="CenterScreen" WindowTransitionsEnabled="False"
+        ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="None" WindowState="Normal" ShowMaxRestoreButton="False">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Укажите способ оплаты:" Margin="10, 0, 10, 0" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding Path=PaymentTypes, Mode=OneWay}" Height="30" Width="200" SelectedItem="{Binding Path=SelectedPaymentType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="10,10,0,10"></ComboBox>
+            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="0" Name="ConfirmButton" Margin="10" Width="120" Click="ConfirmButton_OnClick">Подтверждаю</Button>
+                <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="1" Name="CancelButton" Margin="10" Width="120" Click="CancelButton_OnClick">Отмена</Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Controls:MetroWindow>

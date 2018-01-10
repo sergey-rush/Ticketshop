@@ -1,0 +1,15 @@
+﻿<Controls:MetroWindow x:Class="TicketShop.Shell.Views.ProgressDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Loaded="ProgressDialog_OnLoaded" 
+        BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" GlowBrush="{DynamicResource AccentColorBrush}"
+        Topmost="True" Title="Ticketshop" Height="130" Width="470" WindowStartupLocation="CenterScreen" WindowTransitionsEnabled="False"
+        ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="None" WindowState="Normal" ShowCloseButton="False" ShowMaxRestoreButton="False">
+    <Grid>
+        <StackPanel>
+            <TextBlock Name="ProgressMessage" Margin="10, 16, 0, 30" Width="400" HorizontalAlignment="Left" TextWrapping="Wrap" />
+            <ProgressBar Name="Progress" Margin="10, 0, 10, 18" Height="10" IsIndeterminate="True"></ProgressBar>
+        </StackPanel>
+    </Grid>
+</Controls:MetroWindow>

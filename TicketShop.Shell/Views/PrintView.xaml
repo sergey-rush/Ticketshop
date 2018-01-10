@@ -1,0 +1,122 @@
+﻿<UserControl x:Class="TicketShop.Shell.Views.PrintView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:vm="clr-namespace:TicketShop.Shell.ViewModels">
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,10,10,20">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top">
+                    <GroupBox Header="Заказ" Margin="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Content="{Binding Path=OrderNum}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=TicketsCount}"/>
+                            <Label Grid.Row="0" Grid.Column="2" Content="{Binding Path=OrderDate}"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <Label Margin="10" Content="{Binding OperationResult}" Style="{DynamicResource DescriptionHeaderStyle}" />
+
+                    <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="1" Margin="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="0" Margin="20" Width="120" Command="{Binding Path=PrintTickets}">Печать</Button>
+                            <Button Style="{DynamicResource AccentedSquareButtonStyle}" Grid.Column="1" Margin="20" Width="120" Command="{Binding Path=CloseWizard}">Закрыть</Button>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Bottom">
+                    <GroupBox Header="Список билетов" Margin="10">
+
+                        <ListView ItemsSource="{Binding SelectedSpots, Mode=TwoWay}" SelectedItem="{Binding SelectedSpot}"
+                                  SelectionMode="Single" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Center"
+                                  Style="{StaticResource VirtualisedMetroListView}" BorderThickness="0">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="№" Width="40" DisplayMemberBinding="{Binding ItemId}" />
+                                    <GridViewColumn Header="Сторона" Width="120" DisplayMemberBinding="{Binding SideName}" />
+                                    <GridViewColumn Header="Сектор" Width="120" DisplayMemberBinding="{Binding SectorName}" />
+                                    <GridViewColumn Header="Ряд" Width="80" DisplayMemberBinding="{Binding RowNum}" />
+                                    <GridViewColumn Header="Место" Width="80" DisplayMemberBinding="{Binding SeatNum}" />
+                                    <GridViewColumn Header="Цена" Width="80" DisplayMemberBinding="{Binding Price, StringFormat=C}" />
+                                    <GridViewColumn Header="Статус" Width="80" DisplayMemberBinding="{Binding Status, Converter={StaticResource StatusToInfoConverter}}" />
+                                    <GridViewColumn Header="Бланк" Width="80" DisplayMemberBinding="{Binding Blank.Key}" />
+                                    <GridViewColumn Header="Печать" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Style="{DynamicResource AccentedSquareButtonStyle}" ToolTip="Печать" Command="{Binding Source={x:Static vm:MainViewModel.Instance}, Path=PrintTicket}" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                                                    <Rectangle Width="16" Height="16" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                                        <Rectangle.OpacityMask>
+                                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_printer_text}" />
+                                                        </Rectangle.OpacityMask>
+                                                    </Rectangle>
+                                                </Button>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Печать" Command="{Binding Path=PrintTicket}" />
+                                </ContextMenu>
+                            </ListView.ContextMenu>
+                        </ListView>
+                    </GroupBox>
+                    
+                    <GroupBox Header="Билеты" Margin="10" Visibility="{Binding ShowTickets, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ListView ItemsSource="{Binding SelectedSpots, Mode=TwoWay}" SelectedItem="{Binding SelectedSpot}" SelectionMode="Single"
+                                  IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Center" SnapsToDevicePixels="True"
+                                  Style="{StaticResource VirtualisedMetroListView}" BorderThickness="0" >
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding TicketImage}" HorizontalAlignment="Center" Width="780" Margin="0, 6"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </GroupBox>
+                    
+                    <GroupBox Header="Помощь" Margin="10">
+                        <RichTextBox IsReadOnly="True" Padding="5" IsDocumentEnabled="True">
+                            <FlowDocument>
+                                <Paragraph>
+                                    <Run>Заказ оплачен и готов к печати. На этой форме вы можете распечатать билеты заказа.</Run>
+                                </Paragraph>
+                                <Paragraph>
+                                    <Run>Вы можете распечатать заказ сейчас или позже выбрав заказ из раздела "Заказы".</Run>
+                                </Paragraph>
+                                <Paragraph>
+                                    <Run>Если вы желаете распечатать только один билет из заказа, выберите билет в таблице и нажмите "Печать" в контекстном меню правой кнопки мыши.</Run>
+                                </Paragraph>
+                                <Paragraph>
+                                    <Run>Вы можете распечатать билеты заказа только один раз.</Run>
+                                </Paragraph>
+                                <Paragraph>
+                                    <Run>Если во время печати произойдет ошибка, билету не будет назначен номер бланка.</Run>
+                                </Paragraph>
+                            </FlowDocument>
+                        </RichTextBox>
+                    </GroupBox>
+                </StackPanel>
+            </DockPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
